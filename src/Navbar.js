@@ -29,7 +29,13 @@ const Navbar = () => {
                         Log Out
                     </button>
                 ) : (
-                    <button onClick={navigate("/login")}>Log In</button>
+                    <button
+                        onClick={() => {
+                            navigate("/login");
+                        }}
+                    >
+                        Log In
+                    </button>
                 )}
             </div>
         </nav>
