@@ -11,10 +11,11 @@ const ArticlePage = () => {
     const [articlesInfo, setArticlesInfo] = useState({
         upvotes: 0,
         comments: [],
+        canUpvote: false,
     });
+    const { canUpvote } = articlesInfo;
     const articleId = useParams().article;
     const { user, isLoading } = useUser();
-    console.log("user" + JSON.stringify(user));
 
     useEffect(() => {
         const loadArticleInfo = async () => {
@@ -26,8 +27,11 @@ const ArticlePage = () => {
             const newArticleInfo = response.data;
             setArticlesInfo(newArticleInfo);
         };
-        loadArticleInfo();
-    }, []);
+
+        if (isLoading) {
+            loadArticleInfo();
+        }
+    }, [isLoading, user]);
 
     const addUpvote = async () => {
         const token = user && (await user.getIdToken());
@@ -48,7 +52,9 @@ const ArticlePage = () => {
             <h1>{article.title}</h1>
             <div className="upvotes-section">
                 {user ? (
-                    <button onClick={addUpvote}>Upvote</button>
+                    <button onClick={addUpvote}>
+                        {canUpvote ? "Upvote" : "Already Upvoted"}
+                    </button>
                 ) : (
                     <button>Log In to upvote</button>
                 )}
@@ -65,12 +71,7 @@ const ArticlePage = () => {
                     }
                 />
             ) : (
-                <AddCommentForm
-                    articleName={articleId}
-                    onArticleUpdated={(updatedArticle) =>
-                        setArticlesInfo(updatedArticle)
-                    }
-                />
+                <button>Log in to add a comment</button>
             )}
             <CommentsList comments={articlesInfo.comments} />
         </>
