@@ -1,11 +1,11 @@
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import useUser from "./hooks/useUser.js";
 import { getAuth, signOut } from "firebase/auth";
-import useUser from "./hooks/useUser";
 
-const NavBar = () => {
+const Navbar = () => {
     const { user } = useUser();
     const navigate = useNavigate();
-
     return (
         <nav>
             <ul>
@@ -29,17 +29,11 @@ const NavBar = () => {
                         Log Out
                     </button>
                 ) : (
-                    <button
-                        onClick={() => {
-                            navigate("/login");
-                        }}
-                    >
-                        Log In
-                    </button>
+                    <button onClick={navigate("/login")}>Log In</button>
                 )}
             </div>
         </nav>
     );
 };
 
-export default NavBar;
+export default Navbar;
